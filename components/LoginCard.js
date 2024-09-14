@@ -1,14 +1,13 @@
 import React from 'react';
+import Button from './Button';
 
-export default function LoginCard({ setShowModal }) {
+export default function LoginCard({ setShowModal, register, setRegister }) {
+
   return (
-    <div className="bg-white p-8 rounded shadow-md w-full max-w-sm relative">
-      <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
+    <div className="bg-white p-8 rounded rounded-lg shadow-md w-full max-w-sm relative">
+      <h1 className='text-2xl font mb-6 text-center'>HueHabits</h1>
       <form>
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
-            Username
-          </label>
           <input
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="username"
@@ -17,30 +16,24 @@ export default function LoginCard({ setShowModal }) {
           />
         </div>
         <div className="mb-6">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
-            Password
-          </label>
           <input
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
             id="password"
             type="password"
-            placeholder="******************"
+            placeholder="Password"
           />
         </div>
         <div className="flex items-center justify-between">
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            type="button"
-          >
-            Login
-          </button>
+          <Button text={register ? "Register" : "Sign In"} dark />
+          <p className='text-s text-center'>{ register ? "Got an account? " : "No account? "}<button onClick={() => setRegister(!register)} className='text-indigo-600'>{register ? 'Sign in' : 'Sign up'}</button></p>
         </div>
+        
       </form>
       <button
         className='absolute top-4 right-4 text-black'
         onClick={() => setShowModal(false)}
       >
-        Close
+        x
       </button>
     </div>
   );
