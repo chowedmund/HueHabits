@@ -1,7 +1,7 @@
 import React from 'react'
 import Button from './Button'
 import LoginCard from './LoginCard'
-import Calendar from './Calendar/Calendar'
+import Calendar from './Calendar'
 import Link from 'next/link'
 
 export default function Hero() {

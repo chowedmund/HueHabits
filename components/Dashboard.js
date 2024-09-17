@@ -19,21 +19,27 @@ export default function Dashboard() {
   const year = now.getFullYear()
 
   const [habits, setHabits] = useState([
-    { name: 'Exercise', completed: false },
-    { name: 'Read', completed: false },
-    { name: 'Meditate', completed: false }, 
+    // { name: 'Exercise', completed: false },
+    // { name: 'Read', completed: false },
+    // { name: 'Meditate', completed: false }, 
   ])
 
   function countStreak() {
     let dates = []
 
-    for (let year in data) {
+  for (let year in data) {
+    if (!isNaN(year)) {
       for (let month in data[year]) {
-        for (let day in data[year][month]) {
-          dates.push(new Date(year, month, day))
+        if (!isNaN(month)) {
+          for (let day in data[year][month]) {
+            if (!isNaN(day)) {
+              dates.push(new Date(parseInt(year), parseInt(month), parseInt(day)));
+            }
+          }
         }
       }
     }
+  }
 
     dates.sort((a, b) => a - b)
 
@@ -42,8 +48,9 @@ export default function Dashboard() {
     if (!allHabitsCompleted) {
       currentDate.setDate(currentDate.getDate() - 1) // Start from the previous day
     }
-
-    console.log('dates', currentDate)
+    console.log('date', data)
+    console.log('date', dates)
+    console.log('current date', currentDate)
 
     for (let i = dates.length - 1; i >= 0; i--) {
       if (dates[i].toDateString() === currentDate.toDateString()) {
@@ -66,7 +73,7 @@ export default function Dashboard() {
       return
     }
     setData(userDataObj)
-
+    
     if (userDataObj?.[year]?.[month]?.[day]) {
       setAllHabitsCompleted(true)
       setHabits((prevHabits) =>
@@ -114,11 +121,6 @@ export default function Dashboard() {
   }
 
   const handleCheck = (index) => {
-    // setHabits((prevHabits) =>
-    //   prevHabits.map((habit, i) =>
-    //     i === index ? { ...habit, completed: true } : habit
-    //   )
-    // )
     setHabits((prevHabits) => {
       const updatedHabits = prevHabits.map((habit, i) =>
         i === index ? { ...habit, completed: true } : habit
@@ -135,6 +137,31 @@ export default function Dashboard() {
     })
   }
 
+  const handleAddHabit = async (habitName) => { 
+    const newHabit = { name: habitName, completed: false }
+    const updatedHabits = [...habits, newHabit]
+    setHabits(updatedHabits)
+
+    try {
+      const docRef = doc(db, 'users', currentUser.uid);
+      await setDoc(docRef, { habits: updatedHabits }, { merge: true })
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+
+  const handleDeleteHabit = async (index) => {
+    const updatedHabits = habits.filter((habit, i) => i !== index)
+    setHabits(updatedHabits)
+
+    try {
+      const docRef = doc(db, 'users', currentUser.uid)
+      await setDoc(docRef, { habits: updatedHabits }, { merge: true })
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+
   if (!currentUser) {
     return (
       <div className='flex justify-center items-center w-screen'>
@@ -143,13 +170,17 @@ export default function Dashboard() {
     )
   }
 
-  console.log('data in dashboard', data)
-
   return (
     <div className='p-8 md:p-20 flex flex-1 items-center flex-col md:flex-row gap-8 sm:gap-10'>
       <div className='flex flex-col flex-1 items-center gap-8 w-full'>
         <StreakCounter streak={statuses.num_days} />
-        <HabitChecklist allHabitsCompleted={allHabitsCompleted} habits={habits} onCheck={handleCheck} />
+        <HabitChecklist 
+          allHabitsCompleted={allHabitsCompleted}
+          habits={habits} 
+          onCheck={handleCheck} 
+          onAddHabit={handleAddHabit}
+          onDeleteHabit={handleDeleteHabit}
+        />
       </div>
       <div className='flex-1'>
         <Calendar completeData={data}/>

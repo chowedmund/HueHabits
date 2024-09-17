@@ -16,8 +16,6 @@ export default function Calendar(props) {
 
   const numericMonth = Object.keys(months).indexOf(selectedMonth)
   const data = completeData?.[selectedYear]?.[numericMonth] || {}
-
-  console.log('calendar data', data)
   
   function handleIncrementMonth(val) {
     if (numericMonth + val < 0){
@@ -76,7 +74,7 @@ export default function Calendar(props) {
                   'radial-gradient(circle at 30% 80%, #ccffff, transparent 50%),' +
                   'radial-gradient(circle at 70% 20%, #ccffcc, transparent 50%),' +
                   'radial-gradient(circle at 40% 60%, #ffffcc, transparent 50%)' : 
-                  'white';
+                  'white'
 
 
 

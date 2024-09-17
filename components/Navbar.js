@@ -1,7 +1,7 @@
 import React from 'react'
-import { Fragment_Mono } from "next/font/google";
+import { Fragment_Mono } from "next/font/google"
 
-const fragmentMono = Fragment_Mono({ subsets: ["latin"], weight: ["400"] });
+const fragmentMono = Fragment_Mono({ subsets: ["latin"], weight: ["400"] })
 
 export default function Navbar() {
   return (

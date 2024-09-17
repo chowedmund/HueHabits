@@ -1,7 +1,7 @@
-import React from 'react';
+import React from 'react'
 
 export default function Button(props) {
-  const { text, dark, onClick } = props;
+  const { text, dark, onClick } = props
   return (
     <button
       className={
@@ -14,5 +14,5 @@ export default function Button(props) {
     >
       {text}
     </button>
-  );
+  )
 }

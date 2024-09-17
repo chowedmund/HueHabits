@@ -1,34 +1,34 @@
 'use client'
 
-import React, { useState } from 'react';
-import Button from './Button';
-import { useAuth } from '@/context/AuthContext';
+import React, { useState } from 'react'
+import Button from './Button'
+import { useAuth } from '@/context/AuthContext'
 
 export default function LoginCard() {
-  const [ email, setEmail ] = useState('');
-  const [ password, setPassword ] = useState('');
-  const [ register, setRegister ] = useState(false);
-  const [ authenticating, setAuthenticating ] = useState(false);
-  const { signup, login } = useAuth();
+  const [ email, setEmail ] = useState('')
+  const [ password, setPassword ] = useState('')
+  const [ register, setRegister ] = useState(false)
+  const [ authenticating, setAuthenticating ] = useState(false)
+  const { signup, login } = useAuth()
 
   async function handleSubmit() {
     if (!email || !password || password.length < 6) {
-      alert('Please fill in all fields');
-      return;
+      alert('Please fill in all fields')
+      return
     }
-    setAuthenticating(true);
+    setAuthenticating(true)
     try {
       if (register) {
-        console.log('Registering new user');
-        await signup(email, password);
+        console.log('Registering new user')
+        await signup(email, password)
       } else {
-        console.log('Logging in user');
-        await login(email, password);
+        console.log('Logging in user')
+        await login(email, password)
       }
     } catch (error) {
-      console.log(error.message);
+      console.log(error.message)
     } finally {
-      setAuthenticating(false);
+      setAuthenticating(false)
     }
   }
 
@@ -62,5 +62,5 @@ export default function LoginCard() {
 
       <p className='text-s text-center mt-3'>{ register ? "Got an account? " : "No account? "}<button onClick={() => setRegister(!register)} className='text-indigo-600'>{register ? 'Sign in' : 'Sign up'}</button></p>
     </div>
-  );
+  )
 }
