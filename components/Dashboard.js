@@ -18,28 +18,24 @@ export default function Dashboard() {
   const month = now.getMonth()
   const year = now.getFullYear()
 
-  const [habits, setHabits] = useState([
-    // { name: 'Exercise', completed: false },
-    // { name: 'Read', completed: false },
-    // { name: 'Meditate', completed: false }, 
-  ])
+  const [habits, setHabits] = useState([])
 
   function countStreak() {
     let dates = []
 
-  for (let year in data) {
-    if (!isNaN(year)) {
-      for (let month in data[year]) {
-        if (!isNaN(month)) {
-          for (let day in data[year][month]) {
-            if (!isNaN(day)) {
-              dates.push(new Date(parseInt(year), parseInt(month), parseInt(day)));
+    for (let year in data) {
+      if (!isNaN(year)) {
+        for (let month in data[year]) {
+          if (!isNaN(month)) {
+            for (let day in data[year][month]) {
+              if (!isNaN(day)) {
+                dates.push(new Date(parseInt(year), parseInt(month), parseInt(day)));
+              }
             }
           }
         }
       }
     }
-  }
 
     dates.sort((a, b) => a - b)
 
@@ -48,9 +44,6 @@ export default function Dashboard() {
     if (!allHabitsCompleted) {
       currentDate.setDate(currentDate.getDate() - 1) // Start from the previous day
     }
-    console.log('date', data)
-    console.log('date', dates)
-    console.log('current date', currentDate)
 
     for (let i = dates.length - 1; i >= 0; i--) {
       if (dates[i].toDateString() === currentDate.toDateString()) {
@@ -73,6 +66,11 @@ export default function Dashboard() {
       return
     }
     setData(userDataObj)
+
+
+    if (userDataObj?.habits) {
+      setHabits(userDataObj?.habits)
+    }
     
     if (userDataObj?.[year]?.[month]?.[day]) {
       setAllHabitsCompleted(true)
@@ -102,7 +100,6 @@ export default function Dashboard() {
       newData[year][month][day] = true
   
       setData(newData)
-      console.log('data in dashboard', data)
   
       setUserDataObj(newData)
   
@@ -115,6 +112,7 @@ export default function Dashboard() {
           }
         }
       }, { merge: true })
+      
     } catch (error) {
       console.log(error.message)
     }
@@ -126,6 +124,8 @@ export default function Dashboard() {
         i === index ? { ...habit, completed: true } : habit
       )
 
+      updateHabitsInFirebase(updatedHabits)
+
       // Check if all habits are completed
       const allCompleted = updatedHabits.every(habit => habit.completed)
       console.log('allCompleted', allCompleted)
@@ -133,8 +133,18 @@ export default function Dashboard() {
         setAllHabitsCompleted(true)
       }
 
+      console.log('updatedHabits', updatedHabits)
       return updatedHabits
     })
+  }
+
+  const updateHabitsInFirebase = async (updatedHabits) => {
+    try {
+      const docRef = doc(db, 'users', currentUser.uid)
+      await setDoc(docRef, { habits: updatedHabits }, { merge: true })
+    } catch (error) {
+      console.log(error.message)
+    }
   }
 
   const handleAddHabit = async (habitName) => { 
@@ -169,6 +179,8 @@ export default function Dashboard() {
       </div>
     )
   }
+
+  console.log('habits in dashboard', habits)
 
   return (
     <div className='p-8 md:p-20 flex flex-1 items-center flex-col md:flex-row gap-8 sm:gap-10'>

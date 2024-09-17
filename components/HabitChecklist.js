@@ -10,6 +10,7 @@ export default function HabitChecklist({allHabitsCompleted, habits, onCheck, onA
     }
   }
 
+  console.log('habits in checklist', habits)
   return (
     <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
       <h2 className="text-2xl text-center text-gray-800 mb-4">Today&apos;s Habits</h2>

@@ -21,7 +21,7 @@ export default function Hero() {
         </div>
       </div>
       
-      <div className='flex-1 h-5/6 w-5/6 p-2'>
+      <div className='flex-1 '>
         <Calendar />
       </div>
     </div>
